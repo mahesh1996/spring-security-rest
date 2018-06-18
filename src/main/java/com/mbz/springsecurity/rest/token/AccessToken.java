@@ -34,5 +34,7 @@ public class AccessToken extends AbstractAuthenticationToken {
 		return this.principal;
 	}
 
-
+	public String getAccessToken() {
+		return this.accessToken;
+	}
 }

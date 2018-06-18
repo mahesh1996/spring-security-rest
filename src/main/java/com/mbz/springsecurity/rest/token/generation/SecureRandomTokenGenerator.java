@@ -5,9 +5,11 @@ import java.security.SecureRandom;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import com.mbz.springsecurity.rest.token.AccessToken;
 
+@Component("tokenGenerator")
 public class SecureRandomTokenGenerator implements TokenGenerator {
 
 	SecureRandom random = new SecureRandom();

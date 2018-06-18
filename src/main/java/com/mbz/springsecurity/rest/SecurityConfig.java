@@ -9,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
-@Order
 @Configuration
 public class SecurityConfig {
 
@@ -17,6 +16,5 @@ public class SecurityConfig {
 	public AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> authenticationDetailsSource() {
 		return new WebAuthenticationDetailsSource();
 	}
-	
 	
 }
