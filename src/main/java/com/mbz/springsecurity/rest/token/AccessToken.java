@@ -15,12 +15,16 @@ public class AccessToken extends AbstractAuthenticationToken {
 	public AccessToken(Collection<? extends GrantedAuthority> authorities) {
 		super(authorities);
 		super.setAuthenticated(true);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public AccessToken(UserDetails principal, Collection<? extends GrantedAuthority> authorities, String accessToken) {
 		this(authorities);
 		this.principal = principal;
+		this.accessToken = accessToken;
+	}
+	
+	public AccessToken(String accessToken) {
+		super(null);
 		this.accessToken = accessToken;
 	}
 

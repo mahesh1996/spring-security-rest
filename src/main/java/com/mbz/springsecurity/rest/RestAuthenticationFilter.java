@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,8 @@ import com.mbz.springsecurity.rest.credentials.CredentialsExtractor;
 import com.mbz.springsecurity.rest.token.AccessToken;
 import com.mbz.springsecurity.rest.token.generation.TokenGenerator;
 import com.mbz.springsecurity.rest.token.rendering.AccessTokenJsonRenderer;
+import com.mbz.springsecurity.rest.token.storage.TokenStorageService;
+
 
 public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -38,24 +41,27 @@ public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFi
 	private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> authenticationDetailsSource;
 	private TokenGenerator tokenGenerator;
 	private AccessTokenJsonRenderer accessTokenJsonRenderer;
+	private TokenStorageService tokenStorageService;
 	
-	// TODO Make this status code configurable
-	private Integer failureStatusCode = HttpServletResponse.SC_FORBIDDEN;
-	
+	private SecurityConfigurationProperties securityConfigurationProperties;
+		
 	public RestAuthenticationFilter(RequestMatcher requiresAuthenticationRequestMatcher, ApplicationContext context) {
 		super(requiresAuthenticationRequestMatcher);
 		 this.applicationContext = context;
 		 this.credentialsExtractor = context.getBean("credentialsExtractor", CredentialsExtractor.class);
 		 this.authenticationDetailsSource = context.getBean("authenticationDetailsSource", AuthenticationDetailsSource.class);
 		 this.tokenGenerator = context.getBean("tokenGenerator", TokenGenerator.class);
-		 this.accessTokenJsonRenderer = context.getBean("accessTokenJsonRenderer", AccessTokenJsonRenderer.class);
+		 this.accessTokenJsonRenderer = context.getBean("tokenJsonRenderer", AccessTokenJsonRenderer.class);
+		 this.tokenStorageService = context.getBean("tokenStorageService", TokenStorageService.class);
+		 this.securityConfigurationProperties = context.getBean(SecurityConfigurationProperties.class);
 	}
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
-		
-		this.authenticationManager = WebApplicationContextUtils.getWebApplicationContext(request.getServletContext()).getBean(AuthenticationManager.class);
+		this.applicationContext = WebApplicationContextUtils.getWebApplicationContext(request.getServletContext());
+	
+		this.authenticationManager = this.applicationContext.getBean(AuthenticationManager.class);
 		UsernamePasswordAuthenticationToken authenticationRequest = credentialsExtractor.extractCredentials(request);
 		
 		// TODO check for empty string or null value
@@ -83,11 +89,12 @@ public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFi
 
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-			Authentication authResult) throws IOException, ServletException {
+			Authentication authResult) throws IOException, ServletException, AuthenticationException {
 		UserDetails principal = (UserDetails) authResult.getPrincipal();
 		AccessToken tokenValue = this.tokenGenerator.generateAccessToken(principal);
 		
-		// TODO store token using token storage service
+		// sore token
+		this.tokenStorageService.storeToken(tokenValue.getAccessToken(), principal);
 		
 		// return generated token 
 		response.setContentType("application/json");
@@ -106,7 +113,7 @@ public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFi
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException failed) throws IOException, ServletException {
 		log.debug("Authentication Failed {}", failed.getMessage());
-		log.debug("Setting status code to {}", this.failureStatusCode);
-		response.setStatus(this.failureStatusCode);
+		log.debug("Setting status code to {}", this.securityConfigurationProperties.getFailureStatusCode());
+		response.setStatus(this.securityConfigurationProperties.getFailureStatusCode());
 	}
 }

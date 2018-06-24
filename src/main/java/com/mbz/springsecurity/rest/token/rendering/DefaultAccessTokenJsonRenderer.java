@@ -11,7 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mbz.springsecurity.rest.token.AccessToken;
 
-@Component("accessTokenJsonRenderer")
+@Component("tokenJsonRenderer")
 public class DefaultAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
 
 	private ObjectMapper objectMapper = new ObjectMapper();
