@@ -39,8 +39,5 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.addFilterBefore(new RestAuthenticationFilter(new AntPathRequestMatcher("/api/login", "POST"), context), UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(restTokenValidationFilter, UsernamePasswordAuthenticationFilter.class);
-			
-		
-		http.headers().frameOptions().disable();
 	}
 }
