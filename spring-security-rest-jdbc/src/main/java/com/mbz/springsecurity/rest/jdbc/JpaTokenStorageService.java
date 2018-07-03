@@ -1,18 +1,20 @@
-package com.mbz.springsecurity.rest.token.storage;
+package com.mbz.springsecurity.rest.jdbc;
 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
 
 import com.mbz.springsecurity.rest.SecurityConfigurationProperties;
 import com.mbz.springsecurity.rest.token.AbstractTokenEntity;
+import com.mbz.springsecurity.rest.token.storage.TokenNotFoundException;
+import com.mbz.springsecurity.rest.token.storage.TokenStorageService;
 
-@Component("tokenStorageService")
 public class JpaTokenStorageService implements TokenStorageService {
 
 	@Autowired

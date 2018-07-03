@@ -6,7 +6,7 @@
 	<groupId>com.mbz</groupId>
 	<artifactId>spring-security-rest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<name>spring-security-rest</name>
 	<description>Spring security rest</description>
@@ -46,26 +46,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>com.h2database</groupId>
-		    <artifactId>h2</artifactId>
-		</dependency>
-		<dependency>
-		  <groupId>org.apache.commons</groupId>
-		  <artifactId>commons-lang3</artifactId>
-		  <version>3.7</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.google.guava/guava-io -->
-		<dependency>
-		    <groupId>com.google.guava</groupId>
-		    <artifactId>guava-io</artifactId>
-		    <version>r03</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
@@ -79,4 +59,8 @@
 			</plugin>
 		</plugins>
 	</build> -->
+	<modules>
+		<module>spring-security-rest-core</module>
+		<module>spring-security-rest-jdbc</module>
+	</modules>
 </project>
