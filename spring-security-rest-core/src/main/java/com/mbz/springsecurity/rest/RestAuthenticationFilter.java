@@ -23,6 +23,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.mbz.springsecurity.rest.config.SecurityConfigurationProperties;
 import com.mbz.springsecurity.rest.credentials.CredentialsExtractor;
 import com.mbz.springsecurity.rest.token.AccessToken;
 import com.mbz.springsecurity.rest.token.generation.TokenGenerator;
@@ -51,7 +52,7 @@ public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFi
 		 this.credentialsExtractor = context.getBean("credentialsExtractor", CredentialsExtractor.class);
 		 this.authenticationDetailsSource = context.getBean("authenticationDetailsSource", AuthenticationDetailsSource.class);
 		 this.tokenGenerator = context.getBean("tokenGenerator", TokenGenerator.class);
-		 this.accessTokenJsonRenderer = context.getBean("tokenJsonRenderer", AccessTokenJsonRenderer.class);
+		 this.accessTokenJsonRenderer = context.getBean("tokenRenderer", AccessTokenJsonRenderer.class);
 		 this.tokenStorageService = context.getBean("tokenStorageService", TokenStorageService.class);
 		 this.securityConfigurationProperties = context.getBean(SecurityConfigurationProperties.class);
 	}
@@ -93,7 +94,7 @@ public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFi
 		UserDetails principal = (UserDetails) authResult.getPrincipal();
 		AccessToken tokenValue = this.tokenGenerator.generateAccessToken(principal);
 		
-		// sore token
+		// store token
 		this.tokenStorageService.storeToken(tokenValue.getAccessToken(), principal);
 		
 		// return generated token 
@@ -104,8 +105,6 @@ public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFi
 		
 		String jsonToken = this.accessTokenJsonRenderer.generateJson(tokenValue);
 		
-		log.debug(jsonToken);
-		// Create token renderer and return generated response
 		response.getWriter().write(jsonToken);
 	}
 	

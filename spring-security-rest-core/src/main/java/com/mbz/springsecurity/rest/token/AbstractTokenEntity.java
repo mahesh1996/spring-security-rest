@@ -1,6 +1,5 @@
 package com.mbz.springsecurity.rest.token;
 
-
 public interface AbstractTokenEntity {
 	String getToken();
 	String getUsername();

@@ -13,7 +13,6 @@ import org.springframework.util.Assert;
 import com.mbz.springsecurity.rest.token.AccessToken;
 import com.mbz.springsecurity.rest.token.storage.TokenStorageService;
 
-@Component("tokenAuthenticationProvider")
 public class RestAuthenticationProvider implements AuthenticationProvider {
 	
 	private static final Logger log = LoggerFactory.getLogger(RestAuthenticationProvider.class); 
@@ -39,6 +38,6 @@ public class RestAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public boolean supports(Class<?> authentication) {
-		return authentication == AccessToken.class;
+		return AccessToken.class.isAssignableFrom(authentication);
 	}
 }

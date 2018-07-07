@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.mbz.springsecurity.rest.token.AccessToken;
 
-@Component("tokenGenerator")
 public class SecureRandomTokenGenerator implements TokenGenerator {
 
 	SecureRandom random = new SecureRandom();
@@ -22,5 +21,4 @@ public class SecureRandomTokenGenerator implements TokenGenerator {
         if (tokenSize < 32) token += RandomStringUtils.randomAlphanumeric(32 - tokenSize);
         return new AccessToken(principal, principal.getAuthorities(), token);
 	}
-
 }

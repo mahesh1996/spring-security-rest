@@ -18,6 +18,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
+import com.mbz.springsecurity.rest.config.SecurityConfigurationProperties;
 import com.mbz.springsecurity.rest.token.AccessToken;
 
 public class RestTokenValidationFilter extends GenericFilterBean {
@@ -43,10 +44,10 @@ public class RestTokenValidationFilter extends GenericFilterBean {
 		
 		log.debug("Token found {}", tokenValue);
 		
-		AccessToken authenticationRequest = new AccessToken(tokenValue);
-		AccessToken authenticationResult = (AccessToken) this.tokenAuthenticationProvider.authenticate(authenticationRequest);
-		
 		try {
+			AccessToken authenticationRequest = new AccessToken(tokenValue);
+			AccessToken authenticationResult = (AccessToken) this.tokenAuthenticationProvider.authenticate(authenticationRequest);
+			
 			if (authenticationResult.isAuthenticated()) {
 				log.debug("Token authenticated. Storing the authentication result in the security context");
 	            log.debug("Authentication result: {}", authenticationResult);
@@ -60,5 +61,4 @@ public class RestTokenValidationFilter extends GenericFilterBean {
 			((HttpServletResponse) response).setStatus(this.securityConfigurationProperties.getFailureStatusCode());
 		}
 	}
-
 }

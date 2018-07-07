@@ -10,7 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import com.mbz.springsecurity.rest.SecurityConfigurationProperties;
+import com.mbz.springsecurity.rest.config.SecurityConfigurationProperties;
 import com.mbz.springsecurity.rest.token.AbstractTokenEntity;
 import com.mbz.springsecurity.rest.token.storage.TokenNotFoundException;
 import com.mbz.springsecurity.rest.token.storage.TokenStorageService;
@@ -46,7 +46,8 @@ public class JpaTokenStorageService implements TokenStorageService {
 			token.setUsername(userDetails.getUsername());
 			
 			CrudRepository<AbstractTokenEntity, String> crudRepository = this.applicationContext.getBean("tokenRepository", CrudRepository.class);
-			crudRepository.save(token);	
+			crudRepository.save(token);
+			
 			// TODO handle all exceptions appropriately
 		} catch (InstantiationException e) {
 			throw new TokenNotFoundException(e.getMessage());

@@ -9,5 +9,4 @@ public class TokenNotFoundException extends AuthenticationException {
 	public TokenNotFoundException(String msg) {
 		super(msg);
 	}
-	
 }
