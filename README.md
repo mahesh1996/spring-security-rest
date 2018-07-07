@@ -6,7 +6,7 @@ Library to secure your spring based rest apis in just a second.
 ## How to use it? (Sorry for docs. This will be shortly migrated to github pages)
 
 * Create new spring project. (Boilerplate can be easily generated from [here](https://start.spring.io/))
-* Add following dependencies to pom.xml OR build.gradle accordingly.
+* Add following dependencies to pom.xml OR build.gradle accordingly. (**Below example has been included in `samples` directory**)
 
     * ```
         <dependency>
